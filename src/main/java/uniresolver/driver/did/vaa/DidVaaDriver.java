@@ -76,13 +76,16 @@ public class DidVaaDriver implements Driver {
             }
             jsonResponse = gson.fromJson(entityString, JsonObject.class);
 			log.info("jsonDataElement："+jsonResponse.toString());
-
+			if(jsonResponse.get("resCode").getAsInt() != 0){
+				throw new ResolutionException("docuement not exist");
+			}
 		} catch (IOException ex) {
 			throw new ResolutionException("Cannot retrieve DDO info for `" + identifier + "` from `" + this.getVaaUrl() + "`: " + ex.getMessage(), ex);
 		} catch (JSONException jex) {
 			throw new ResolutionException("Cannot parse JSON response from `" + this.getVaaUrl() + "`: " + jex.getMessage(), jex);
 		}
 		JsonObject jsonDataObject=jsonResponse.getAsJsonObject("didDocument");
+		
         String context = "https://w3id.org/did/v1";
          List<PublicKey> publicKeys = new ArrayList<PublicKey>();
                     JsonArray publicKey = jsonDataObject == null ? null : jsonDataObject.getAsJsonArray("publicKey");
@@ -119,8 +122,8 @@ public class DidVaaDriver implements Driver {
 		// create Method METADATA
 		Map<String, Object> methodMetadata = new LinkedHashMap<>();
 		methodMetadata.put("proof", gson.fromJson(jsonDataObject.getAsJsonObject("proof"), Map.class));
-		methodMetadata.put("created", jsonDataObject.get("created").toString());
-		methodMetadata.put("updated", jsonDataObject.get("updated").toString());
+		methodMetadata.put("created", jsonDataObject.get("created").getAsString());
+		methodMetadata.put("updated", jsonDataObject.get("updated").getAsString());
 
 		// create RESOLVE RESULT
 		ResolveResult resolveResult = ResolveResult.build(didDocument, null, methodMetadata);
