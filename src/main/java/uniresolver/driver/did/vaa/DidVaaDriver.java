@@ -32,7 +32,7 @@ public class DidVaaDriver implements Driver {
 
 	public static final Pattern DID_VAA_PATTERN = Pattern.compile("^did:vaa:([123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{27,31})$");
 
-	public static final String DEFAULT_VAA_URL = "http://45.120.243.40:8768/";
+	public static final String DEFAULT_VAA_URL = "http://www.citln.cn/vaa-resolver";
 
 	public static final HttpClient DEFAULT_HTTP_CLIENT = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build();
 
